@@ -53,7 +53,7 @@
                             <h5 class="card-title">{{ objet.nom }}</h5>
                             {% if objet.typeObject == "lumiere" %}
                                 <div>
-                                    <input type="range" name="lumiere_{{ objet.id }}" id="rangeLumiere_{{ objet.id }}" class="variateursAmpoules" data-id="{{ objet.id }}"
+                                    <input type="range" step="10" name="lumiere_{{ objet.id }}" id="rangeLumiere_{{ objet.id }}" class="variateursAmpoules" data-id="{{ objet.id }}"
                                             value="{{ objet.data1 }}" style="width: 100px;">
                                     <label for="lumiere_{{ objet.id }}" id="InfoAmpoule_{{ objet.id }}">{{ objet.data1 }} %</label>
                                     <button type="button" class="btn btn-primary btn-sm btnAmpoule" id="btnAmpoule_{{ objet.id }}" data-id="{{ objet.id }}">Sauvegarder</button>

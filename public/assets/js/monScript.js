@@ -66,9 +66,8 @@ xhr.onreadystatechange = function() {
                 resultTitre.innerHTML   = '';
             }
         } else if ( this.readyState >= 1 && this.readyState <= 3) {
-            result.innerHTML = `
-                <img src="{{ asset('assets/img/57932-full.gif') }}" alt="Attente de la météo..." />
-            `;
+            result.innerHTML = '<img src="' + assetsBaseDir + '57932-full.gif" width="25" height="25" alt="Attente de la météo..." /><i class="fas fa-cloud-sun"></i>';
+            resultTitre.innerHTML = '<img src="' + assetsBaseDir + '57932-full.gif" width="25" height="25" alt="Attente de la météo..." /><i class="fas fa-cloud-sun"></i>';
         }
     // } else 
     //     result.innerHTML = '';

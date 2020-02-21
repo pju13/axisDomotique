@@ -1,0 +1,152 @@
+html{
+	box-sizing: border-box;
+}
+*,*:after,*:before{
+	box-sizing: inherit;
+}
+/*************************************
+* Fin BOX-SIZING
+*************************************/
+:root {
+    --c1-color: #35c0dc;
+    --c2-color: #d37770;
+    --p-color: #424242;
+    --i-color: #268796;
+    --a-color: #424242;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+	margin: 0;
+	color: var(--p-color);
+    line-height: 1.8;
+    font-size: 16px;
+}
+
+main {
+    overflow: hidden;
+
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#1d646a+0,2b9bae+14,35c0dc+38 */
+    background: #1d646a; /* Old browsers */
+    background: -moz-linear-gradient(top,  #1d646a 0%, #2b9bae 14%, #35c0dc 38%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #1d646a 0%,#2b9bae 14%,#35c0dc 38%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #1d646a 0%,#2b9bae 14%,#35c0dc 38%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d646a', endColorstr='#35c0dc',GradientType=0 ); /* IE6-9 */
+}
+a {
+	color: var(--a-color);
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+h1, h2, h3, h4, h5 {
+	font-weight: normal;
+	text-align: center;
+	font-family: 'Nunito', sans-serif;
+}
+p {
+    font-family: 'Roboto', sans-serif;
+}
+/*************************************
+* Fin Globale
+*************************************/
+.container {
+    margin-top: 15px;
+}
+.container .card {
+    min-height: 180px;
+    box-shadow: 5px 5px 5px var(--p-color);
+}
+.container .card-body {
+    padding: 0;
+    padding-top: 5px;
+}
+.container .card-body h5 {
+    font-size: 1em;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.container .card .chauffage {
+    width: 50px;
+}
+
+button.btnAmpoule {
+    visibility: hidden;
+}
+/*************************************
+* Fin Main
+*************************************/
+
+#resultMeteoTitre {
+    margin-left: 30px;
+}
+
+#resultMeteo {
+    margin-top: 2%;
+    margin-bottom: 25%;
+    padding-top: 2%;
+    text-align: center;
+    position: relative;
+
+    /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#1d646a+0,2b9bae+14,35c0dc+38 */
+    background: #1d646a; /* Old browsers */
+    background: -moz-linear-gradient(top,  #1d646a 0%, #2b9bae 14%, #35c0dc 38%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #1d646a 0%,#2b9bae 14%,#35c0dc 38%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #1d646a 0%,#2b9bae 14%,#35c0dc 38%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d646a', endColorstr='#35c0dc',GradientType=0 ); /* IE6-9 */
+}
+#resultMeteo:before {
+    font-family: "FontAwesome";
+    font-weight: 900; 
+    content: "\f0d7";
+    position: absolute;
+    top: -21px;
+    color: #35c0dc;
+    font-size: 2em;
+    z-index: 1;
+}
+
+#resultMeteo h2 {
+    color: white;
+    font-size: 1.5em;
+    margin-top: 15px;
+}
+#resultMeteo article {
+    display: inline-block;
+    width: 250px;
+    border: 1px solid white;
+    border-radius: 5px 5px 5px 5px;
+    margin-right: 5px;
+    text-align: center;
+    background-color: var(--c2-color);
+    position: relative;
+    box-shadow: 5px 5px 5px var(--c2-color);
+}
+#resultMeteo article p,
+#resultMeteo p {
+    font-size: 1em;
+    color: white;
+}
+.taillePetite {
+    font-size: 0.8em;
+}
+
+#resultMeteo article:nth-of-type(1):before,
+#resultMeteo article:nth-of-type(2):before,
+#resultMeteo article:nth-of-type(3):before {
+    font-family: "FontAwesome";
+    font-weight: 900; 
+    content: "\f0da";
+    position: absolute;
+    top: 40%;
+    right: -15px;
+    color: white;
+    font-size: 1.8em;
+    z-index: 1;
+    background-color: black;
+    padding: 5px 5px;
+    border-radius: 50px;
+}
+/*************************************
+* Fin Météo Ajax
+*************************************/

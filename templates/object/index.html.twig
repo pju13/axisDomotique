@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Axis Domotique | Objets connectés{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/domotique.css') }}">
+{% endblock %}
+
+{% block body %}
+
+<!-- Suite de la navbar -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Scénarii
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                {% for Scenario in Scenarii %}
+                    <a class="dropdown-item" href="{{ path('scenario', {'id': Scenario.id }) }}"> {{ Scenario.nom }}</a>
+                {% endfor %}
+                </div>
+            </li>
+        </ul>
+        <span class="navbar-text" id="resultMeteoTitre">Météo en attente...</span>
+    </div>
+</nav>
+
+<main>
+<!-- Listing des objets -->
+<div class="container">
+  <div class="row row-cols-2 row-cols-sm-4 justify-content-around">
+    {% for objet in objets %}
+        <div class="col">
+            <!-- Description d'un objet : -->
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        {% if objet.typeObject == "lumiere" %}
+                            {% if objet.data1 > 0 %}
+                                <img src="{{ asset('assets/img/lum_on.png') }}" id="ampoule_{{ objet.id }}" class="card-img" alt="lumiere objet">
+                            {% else %}
+                                <img src="{{ asset('assets/img/lum_off.png') }}" id="ampoule_{{ objet.id }}" class="card-img" alt="lumiere objet">
+                            {% endif %}
+                        {% elseif objet.typeObject == "volet" %}
+                            <img src="{{ asset('assets/img/volet.png') }}" class="card-img" alt="volet objet">
+                        {% elseif objet.typeObject == "clim" %}
+                            <img src="{{ asset('assets/img/clim.png') }}" class="card-img" alt="clim objet">
+                        {% else %}
+                            <img src="{{ asset('assets/img/chauffage.png') }}" class="card-img chauffage" alt="chauffage objet">
+                        {% endif  %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ objet.nom }}</h5>
+                            {% if objet.typeObject == "lumiere" %}
+                                <div>
+                                    <input type="range" name="lumiere_{{ objet.id }}" id="rangeLumiere_{{ objet.id }}" class="variateursAmpoules" data-id="{{ objet.id }}"
+                                            value="{{ objet.data1 }}" style="width: 100px;">
+                                    <label for="lumiere_{{ objet.id }}" id="InfoAmpoule_{{ objet.id }}">{{ objet.data1 }} %</label>
+                                    <button type="button" class="btn btn-primary btn-sm btnAmpoule" id="btnAmpoule_{{ objet.id }}" data-id="{{ objet.id }}">Sauvegarder</button>
+                                </div>
+                            {% elseif objet.typeObject == "volet" %}
+                                <p id="statut_Volet_{{ objet.id }}">Statut : {{ objet.statut }}</p>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="optionVolet" id="opt_Volet_F" data-id="{{ objet.id }}" value="Fermé"> <i class="fas fa-arrow-alt-circle-down"></i>
+                                    </label>
+                                    <label class="btn btn-secondary active">
+                                        <input type="radio" name="optionVolet" id="opt_Volet_E" data-id="{{ objet.id }}" value="Entrouvert"> <i class="far fa-stop-circle"></i>
+                                    </label>
+                                    <label class="btn btn-secondary">
+                                        <input type="radio" name="optionVolet" id="opt_Volet_O" data-id="{{ objet.id }}" value="Ouvert"> <i class="fas fa-arrow-alt-circle-up"></i>
+                                    </label>
+                                </div>
+                            {% endif  %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Affichage de la météo en Ajax -->
+<div id="resultMeteo"></div>
+
+</main>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        // Pouvoir récupérer le chemin accès aux images :
+        var assetsBaseDir = "{{asset('assets/img/')}}";
+
+        // Gestion du variateur de lumière :
+        var btnAmpouleAll = document.querySelectorAll(".btnAmpoule");
+        if (btnAmpouleAll.length != 0)
+        {
+            btnAmpouleAll.forEach(function(btn_ampoule) {
+                btn_ampoule.addEventListener("click", function(){
+                    // Récupérer l'id de objet ampoule :
+                    var id              = btn_ampoule.getAttribute("data-id");
+                    var rangeLumiere    = document.getElementById("rangeLumiere_"+id);
+
+                    var formData = new FormData();
+                    formData.append("idObject", id);
+                    formData.append("ObjectType", "lumiere");
+                    formData.append("ObjectValue", rangeLumiere.value);
+
+                    // ON VA ENVOYER UNE REQUETE AJAX AVEC fetch
+                    var urlAjax = "{{ path('ajaxUpdateData') }}"; 
+                    fetch(urlAjax, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function(objetResponse){
+                        console.log(objetResponse);
+                        btn_ampoule.style.visibility = "hidden"; 
+                    }); 
+                });
+            });
+        }
+
+        // Gestion des boutons du volet :
+        var radioOptionVoletAll = document.getElementsByName("optionVolet");
+        console.log(radioOptionVoletAll);
+        if (radioOptionVoletAll.length != 0)
+        {
+            radioOptionVoletAll.forEach(function(radioOptionVolet) {
+                console.log(radioOptionVolet);
+                radioOptionVolet.addEventListener("click", function(){
+                    // Récupérer l'id de objet ampoule :
+                    var id              = radioOptionVolet.getAttribute("data-id");
+                    var statutVolet     = radioOptionVolet.value;
+
+                    // Mise à jour du statut :
+                    var statut_VoletResult = document.getElementById("statut_Volet_"+id);
+                    statut_VoletResult.innerHTML = "Statut : "+statutVolet;
+
+                    var formData = new FormData();
+                    formData.append("idObject", id);
+                    formData.append("ObjectType", "volet");
+                    formData.append("ObjectValue", statutVolet);
+
+                    // ON VA ENVOYER UNE REQUETE AJAX AVEC fetch
+                    var urlAjax = "{{ path('ajaxUpdateData') }}"; 
+                    fetch(urlAjax, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function(objetResponse){
+                        console.log(objetResponse);
+                    });
+                });
+            });
+        }
+    </script>
+
+    <script src="{{ asset('assets/js/monScript.js') }}"></script>
+{% endblock %}
